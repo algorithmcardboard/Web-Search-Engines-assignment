@@ -35,6 +35,7 @@ If we assume nyu to have 1M postings and abracadabra to have 100 postings, by fo
         \ForAll{docId in result}
           \If{Hash<docID,term> == 0}
             \State{} $remove(result, docId)$
+            \State{} continue
           \EndIf{}
         \EndFor{}
       \EndFor{}
@@ -66,9 +67,9 @@ A search engine faces a difficult task of tokenizing worldwide telephone numbers
 Eventhough we face several issue while identifying the phone numbers we can use the other information available in the page to make a guess of the right format and the right phone number.  Some of the visual clues are
 
 \begin{enumerate}
-  \item HTML markups can provide clues as to which numbers are telephone numbers.  Such as <a href = "tel:xxxx"></a> tags.
+  \item HTML markups can provide clues as to which numbers are telephone numbers.  Such as <a href = ``tel:xxxx''></a> tags.
   \item Locality of Phone numbers. Phone numbers are generlly located along side address.  By identifying address or part of address we can generally infer phone numbers
-  \item  The format of phone numbers can be domain/location specific.  For example the ways of representing a phone number in India will differ from that in USA.  But a particular format can generally be well used in a country.  By identifying the language or the domain location, we can infer and tokenize phone numbers better.
+  \item  The format of phone numbers can be domain/location specific.  For example the ways of representing a phone number in India will differ from that in USA\@.  But a particular format can generally be well used in a country.  By identifying the language or the domain location, we can infer and tokenize phone numbers better.
 \end{enumerate}
 
 The above few points summarize the difficulties in infering and tokenizing phone numbers.  If we dont infer them properly we might end up tokenizing phone numbers in a different manner.  Once we identify a phone number it is better to index them in a standard querable format so that we can convert them to whatever format necessary when we give mined information.
@@ -81,24 +82,32 @@ From the CMS book, we know that the probability of a web page getting changed fo
   Age(\lambda, t) = \int_{0}^{t} \lambda e^{-\lambda x}(t - x)dx
 \end{align}
 
-Equation~\eqref{age_eq} gives a reasonable value for the age of a particular web page.  The second derivative of this expression gives the correct value for the cost of not crawling a web page.  Similarly, we can get an expression of the age of a web page with respect to the amount of change sigma.  The random variable in the above case is the expression (t-x) which gives an approximate value of age.  Similarly we can represent by $\delta\sigma$ the random variable of amount of change of a website w.r.t time.  Then the amount of change can be given as 
+Equation~\eqref{age_eq} gives a reasonable value for the age of a particular web page.  The second derivative of this expression gives the correct value for the cost of not crawling a web page.  Similarly, we can get an expression of the age of a web page with respect to the amount of change $\Delta \sigma$.  The random variable in the above case is the expression (t-x) which gives an approximate value of age.  Similarly we can represent by $\Delta\sigma$ the random variable of amount of change of a website w.r.t time.  Then the amount of change can be given as 
 
 \begin{align}
   \label{change_eq}
-  Change(\lambda, \sigma, t) = \int_{0}^{t} \lambda e^{-\lambda x}\delta\sigma dx
+  Change(\lambda, \sigma, t) = \int_{0}^{t} \lambda e^{-\lambda x}\Delta\sigma dx
 \end{align}
 
-The second order derivative of the above equation can be written as:
+The first order derivative of the above equation is:
 
 \begin{align}
   \label{cost_fn}
-  \frac{d}{dx} \lambda e^{-\lambda x} \delta \sigma =& \lambda e^{-\lambda x} [ \lambda(x - t) - 1]
+  \frac{d}{dx} \int_{0}^{t} \lambda e^{-\lambda x} \Delta \sigma dx =& \lambda e^{-\lambda x}\Delta\sigma
 \end{align}
+
+Minimizing the equation\eqref{cost_fn} w.r.t time gives us the optimal frequency with which we have to crawl a particular web site.
 
 \subsection{Information for better crawl performance}
 The crawler should collect the following information while crawling a webpage
 \begin{enumerate}
-  \item The $\delta $ difference between the sizes of the web page between the last crawl and current crawl.
+  \item The $\Delta $ difference between the sizes of the web page between the last crawl and current crawl.
+  \item The average refresh frequency of the web page
+  \item Stastic such as whether the webpage is a portal with multiple links to other websites.
 \end{enumerate}
+These stastic help us firgure out how frequent we should update our webpage and the optimal crawling strategy.  More importantly it helps us figure out all the variables required to minimize equation\eqref{cost_fn}.
+
+\subsection{Missing Pages}
+
 
 \end{document}
