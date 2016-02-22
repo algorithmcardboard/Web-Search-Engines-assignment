@@ -88,3 +88,9 @@ segments_*
 *.si
 *.cfs
 *.cfe
+
+
+*.aux
+*.dvi
+*.log
+*.ps

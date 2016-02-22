@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\pagestyle{fancy}
+\lhead{Anirudhan J Rajagopalan --- ajr619 --- N18824115}
+
+\begin{document}
+
+\title{Web Search Engines --- Homework 1}
+\date{Feburary 19, 2016}
+\author{Anirudhan J Rajagopalan\\ N18824115\\ ajr619}
+\maketitle
+\newpage
+
+\section[A]{Problem 1}
+\subsection{Optimality of processing postings by increasing size order}
+Processing the posting lists by the increasing order of the sizes of the posting list is infact optimal.  A conjuctive query is made of AND clauses joined together.  For example ``abracadabra AND nyu'' is a conjuctive query.  Lets assume that NYU has more postings than abracadabra.  Now if we process by the increasing order of posting size, we should fetch all the postings for abracadabra and the fetch all the postings for nyu.  Since a conjuctive query returns all documents that contains both the terms, \textbf{the total result size should be lesser than or equal to the size of the smallest postings}.
+
+If we assume nyu to have 1M postings and abracadabra to have 100 postings, by following the INTERSECT algorithm, we take a total of $O(1M  + 100)$ for searching.  But since we only keep the smaller list in memory, processing from smallest to largest lets us use less RAM\@.
+
+\subsection{Hashtable to speed up INTERSECT}
+\begin{algorithm}
+  \caption{INTERSECT algorithm using hashing to improve runtime\label{alg:intersect-with-hashing}}
+  \begin{algorithmic}[1]
+    \Function{INTERSECT}{$t_{1},\ldots, t_{n}$}
+      \State{} $terms \gets $SORTBYINCREASINGFREQUENCY$(<t_{1}, \ldots , t_{n}>)$
+      \State{} $result \gets postings(first(terms)) $
+      \State{} $terms \gets rest(terms) $
+      \ForAll{term in terms}
+        \ForAll{docId in result}
+          \If{Hash<docID,term> == 0}
+            \State{} $remove(result, docId)$
+          \EndIf{}
+        \EndFor{}
+      \EndFor{}
+      \State{} \Return{$result$}
+    \EndFunction{}
+  \end{algorithmic}
+\end{algorithm}
+
+The worst case time complexity of the above method will be that of the length of the shortest list times the number of terms.  Since we order the terms by increasing order of freqency, this will lead to trimming of the results very fast.
+
+\section[Problem 2]{Problem 2}
+\subsection{Search Experiments}
+A number of experiments were carried out with the given query.  This includes adding the international code, removing punctuation, removing part of the punctuation, removing the area code and so on.  A sample of the observations is as given below:
+\begin{description}
+  \item[2129983123] Home page does't show up
+  \item[212-998-3123] Home page shows up as 4th result % checktex ##
+  \item[+1-212-998-3123] A mention of Professor Ernest Davis as the 9th result at academia.edu website.
+  \item[998-3123] No result for Ernest Davis or NYU
+\end{description}
+The results vary a lot when I search after signing off from my google account.
+
+\subsection{Difficulties with tokenizing worldwide telephone numbers}
+A search engine faces a difficult task of tokenizing worldwide telephone numbers.  Phone numbers can be represented in a variety of ways, just as the way we used for searching above.  A few issues with identifying telephone numbers are
+\begin{enumerate}
+  \item Inconsistent use of punctuation such as brackets, hyphens, periods, and spaces. 
+  \item Inconsistent use of international codes/area codes and other information that a human can generally assume.
+\end{enumerate}
+
+Eventhough we face several issue while identifying the phone numbers we can use the other information available in the page to make a guess of the right format and the right phone number.  Some of the visual clues are
+
+\begin{enumerate}
+  \item HTML markups can provide clues as to which numbers are telephone numbers.  Such as <a href = "tel:xxxx"></a> tags.
+  \item Locality of Phone numbers. Phone numbers are generlly located along side address.  By identifying address or part of address we can generally infer phone numbers
+  \item  The format of phone numbers can be domain/location specific.  For example the ways of representing a phone number in India will differ from that in USA.  But a particular format can generally be well used in a country.  By identifying the language or the domain location, we can infer and tokenize phone numbers better.
+\end{enumerate}
+
+The above few points summarize the difficulties in infering and tokenizing phone numbers.  If we dont infer them properly we might end up tokenizing phone numbers in a different manner.  Once we identify a phone number it is better to index them in a standard querable format so that we can convert them to whatever format necessary when we give mined information.
+
+\section[Problem 3]{Problem 3}
+\subsection{Reasonable Objective function}
+From the CMS book, we know that the probability of a web page getting changed follows a Poisson distribution.  Hence we got the formula for age as:
+\begin{align}
+  \label{age_eq}
+  Age(\lambda, t) = \int_{0}^{t} \lambda e^{-\lambda x}(t - x)dx
+\end{align}
+
+Equation~\eqref{age_eq} gives a reasonable value for the age of a particular web page.  The second derivative of this expression gives the correct value for the cost of not crawling a web page.  Similarly, we can get an expression of the age of a web page with respect to the amount of change sigma.  The random variable in the above case is the expression (t-x) which gives an approximate value of age.  Similarly we can represent by $\delta\sigma$ the random variable of amount of change of a website w.r.t time.  Then the amount of change can be given as 
+
+\begin{align}
+  \label{change_eq}
+  Change(\lambda, \sigma, t) = \int_{0}^{t} \lambda e^{-\lambda x}\delta\sigma dx
+\end{align}
+
+The second order derivative of the above equation can be written as:
+
+\begin{align}
+  \label{cost_fn}
+  \frac{d}{dx} \lambda e^{-\lambda x} \delta \sigma =& \lambda e^{-\lambda x} [ \lambda(x - t) - 1]
+\end{align}
+
+\subsection{Information for better crawl performance}
+The crawler should collect the following information while crawling a webpage
+\begin{enumerate}
+  \item The $\delta $ difference between the sizes of the web page between the last crawl and current crawl.
+\end{enumerate}
+
+\end{document}
