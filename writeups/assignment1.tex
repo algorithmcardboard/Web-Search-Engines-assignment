@@ -82,7 +82,7 @@ From the CMS book, we know that the probability of a web page getting changed fo
   Age(\lambda, t) = \int_{0}^{t} \lambda e^{-\lambda x}(t - x)dx
 \end{align}
 
-Equation~\eqref{age_eq} gives a reasonable value for the age of a particular web page.  The second derivative of this expression gives the correct value for the cost of not crawling a web page.  Similarly, we can get an expression of the age of a web page with respect to the amount of change $\Delta \sigma$.  The random variable in the above case is the expression (t-x) which gives an approximate value of age.  Similarly we can represent by $\Delta\sigma$ the random variable of amount of change of a website w.r.t time.  Then the amount of change can be given as 
+Equation~\eqref{age_eq} gives a reasonable value for the age of a particular web page.  The second derivative of this expression gives the correct value for the cost of not crawling a web page.  Similarly, we can get an expression of the age of a web page with respect to the amount of change $\Delta \sigma$.  The rate of change $(\Delta \sigma)$ is assumed to be constant for a particular web page. The random variable in the above case is the expression (t-x) which gives an approximate value of age.  Similarly we can represent by $\Delta\sigma$ the random variable of amount of change of a website w.r.t time.  Then the amount of change can be given as 
 
 \begin{align}
   \label{change_eq}
@@ -108,6 +108,5 @@ The crawler should collect the following information while crawling a webpage
 These stastic help us firgure out how frequent we should update our webpage and the optimal crawling strategy.  More importantly it helps us figure out all the variables required to minimize equation\eqref{cost_fn}.
 
 \subsection{Missing Pages}
-
 
 \end{document}
