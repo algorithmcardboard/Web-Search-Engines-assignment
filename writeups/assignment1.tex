@@ -105,7 +105,7 @@ The crawler should collect the following information while crawling a webpage
   \item The average refresh frequency of the web page
   \item Stastic such as whether the webpage is a portal with multiple links to other websites.
 \end{enumerate}
-These stastic help us firgure out how frequent we should update our webpage and the optimal crawling strategy.  More importantly it helps us figure out all the variables required to minimize equation\eqref{cost_fn}.
+These statistics help us figure out how frequently we should update our index for the webpage and the optimal crawling strategy.  More importantly it helps us figure out all the variables required to minimize equation\eqref{cost_fn}.
 
 \subsection{Missing Pages}
 If we dont crawl a web page, there is no way to know whether a new link to page B has been added.  We can find if a page has changed by using the HEAD request which gives us the last modified time for a page and then use the response to decide on a full crawl.  This will help us to crawl only when a page has changed.
