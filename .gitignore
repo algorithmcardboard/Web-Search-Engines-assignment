@@ -82,3 +82,9 @@ atlassian-ide-plugin.xml
 /intTestHomeDir
 
 Prog1ExampleDirectory
+
+*.lock
+segments_*
+*.si
+*.cfs
+*.cfe
