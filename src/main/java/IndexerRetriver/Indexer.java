@@ -16,25 +16,27 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+
 import HTMLParser.ParsedDocument;
 import HTMLParser.Parser;
 
 public class Indexer {
 
-	public static void main(String[] args) throws URISyntaxException, IOException {
+	@Parameter(names={"--index", "-i"}, required=true)
+	private String indexPath;
+	@Parameter(names={"--docs", "-d"}, required=true)
+	private String inputFilesPath;
 
-		System.out.println("Args are " + args);
-
-		String inputFilesPath = args[0];
-		String indexPath = args[1];
-
+	public void index() throws IOException{
 		Analyzer analyzer = new StandardAnalyzer();
 		IndexWriterConfig conf = new IndexWriterConfig(analyzer);
 		Directory dir = FSDirectory.open(Paths.get(indexPath));
 		final IndexWriter writer = new IndexWriter(dir, conf);
-
+		
 		FileWalker walker = new FileWalker("*.{html,htm}", new FileAction() {
-
+			
 			public void doWithMatchingFiles(Path path) {
 				System.out.println(path);
 				Parser p = new Parser(path);
@@ -50,9 +52,9 @@ public class Indexer {
 				}
 			}
 		});
-
+		
 		Path startingDir = Paths.get(inputFilesPath);
-
+		
 		try {
 			Files.walkFileTree(startingDir, walker);
 		} catch (IOException e) {
@@ -61,5 +63,12 @@ public class Indexer {
 		}
 		walker.done();
 		writer.close();
+	}
+
+	public static void main(String[] args) throws URISyntaxException, IOException {
+		System.out.println("Args are " + args);
+		Indexer indexer = new Indexer();
+		new JCommander(indexer, args);
+		indexer.index();
 	}
 }

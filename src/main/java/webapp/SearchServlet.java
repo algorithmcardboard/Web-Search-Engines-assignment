@@ -21,7 +21,7 @@ public class SearchServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	Retriever ret = new Retriever();
+	Retriever ret = new Retriever("../index");
 
 	public SearchServlet() {
 		super();

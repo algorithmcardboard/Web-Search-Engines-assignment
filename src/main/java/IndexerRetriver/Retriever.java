@@ -20,14 +20,36 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+
 public class Retriever {
 
-	private static final String indexPath = "../index";
+	@Parameter(names={"--index", "-i"}, required=false)
+	private String indexPath = "../index";
+	
+	@Parameter(names={"--query", "-q"}, required=true)
+	private String query="";
+	
+	public Retriever(String path) {
+		this.indexPath = path;
+	}
+	
+	public Retriever(){
+	}
 
 	public static void main(String[] args) throws IOException, ParseException {
+		System.out.println("Arguments are "+args);
+		Retriever ret = new Retriever();
+		new JCommander(ret, args);
+		List<Map<String,String>> results = ret.search(ret.query);
+		for(Map<String, String> res : results){
+			System.out.println(res.get("title"));
+		}
 	}
 
 	public List<Map<String,String>> search(String searchTerm) throws IOException, ParseException {
+		System.out.println("CAlling search with "+searchTerm);
 		Directory directory = FSDirectory.open(Paths.get(indexPath));
 		IndexReader indexReader = DirectoryReader.open(directory);
 		IndexSearcher searcher = new IndexSearcher(indexReader);
