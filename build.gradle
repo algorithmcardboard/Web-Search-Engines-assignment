@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'war'
 apply plugin: 'application'
 
 sourceCompatibility = 1.7
@@ -36,6 +37,13 @@ dependencies {
 
 test {
     systemProperties 'property': 'value'
+}
+
+task crawlerjar(type: Jar) {
+    baseName = "crawler"
+    mainClassName = 'crawler.Crawler'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 uploadArchives {

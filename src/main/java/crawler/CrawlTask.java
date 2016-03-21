@@ -16,15 +16,9 @@ public class CrawlTask {
 
 	private String url;
 	private Link link;
-	public static String absPath = "docs/";
-
 	public CrawlTask(Link link) {
 		this.url = link.getUrl();
 		this.link = link;
-	}
-
-	public static String getAbspath() {
-		return absPath;
 	}
 
 	public CrawlResult fetchAndSavePage(List<String> query) throws Exception {
@@ -45,7 +39,8 @@ public class CrawlTask {
 			return new CrawlResult(this.link, responseCode);
 		}
 
-		String file = CrawlTask.absPath + url.getHost() + url.getPath();
+		String file = Crawler.docs + "/" +  url.getHost() + url.getPath();
+		System.out.println("File is "+file);
 		File f = new File(new File(file).getParent());
 		f.mkdirs();
 

@@ -19,7 +19,7 @@ public class RobotsTxt {
 	private static Map<String, Boolean> robotsPresent = new HashMap<>();
 
 	static {
-		File f = new File(CrawlTask.absPath + "/robots");
+		File f = new File(Crawler.docs + "/robots");
 		f.mkdirs();
 	}
 
@@ -82,7 +82,7 @@ public class RobotsTxt {
 	}
 
 	private static String getFileName(URL url) {
-		return CrawlTask.absPath + "/robots/" + url.getHost();
+		return Crawler.docs + "/robots/" + url.getHost();
 	}
 
 	private static boolean fetchAndSave(URL url) throws IOException {

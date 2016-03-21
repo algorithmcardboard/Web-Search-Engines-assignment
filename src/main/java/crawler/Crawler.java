@@ -1,7 +1,6 @@
 package crawler;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,18 +14,37 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+
 public class Crawler {
 
+	@Parameter(names = { "-url", "-u" }, required = true)
+	private String seedURL;
+
+	@Parameter(names = { "-query", "-q" }, required = true, variableArity = true)
+	private List<String> query;
+
+	@Parameter(names = { "-docs" }, required = true)
+	static String docs;
+
+	@Parameter(names = { "-maxPages", "-m" })
+	private int maxPages = 100;
+
+	@Parameter(names = { "-trace", "-t" })
+	private boolean debug = false;
+	
+	public static boolean verbose = false;
+	
 	private ExecutorService executor = null;
 	private Map<String, Link> crawledPages = new ConcurrentHashMap<>();
 	private PriorityBlockingQueue<Link> prioQueue = new PriorityBlockingQueue<Link>();
-	private static int maxPages = 10;
 	private int maxDepth = 10;
 
-	public static boolean verbose = true;
 
 	Crawler() {
 		executor = new ThreadPoolExecutor(1, 1, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		Crawler.verbose = this.debug;
 	}
 
 	private void shutdown() {
@@ -43,7 +61,10 @@ public class Crawler {
 		return submit.get();
 	}
 
-	public void crawl(String seedURL, List<String> query) throws IOException, InterruptedException, ExecutionException {
+	public void crawl() throws IOException, InterruptedException, ExecutionException {
+
+		System.out
+				.println("Crawling for " + maxPages + " pages relevant to \"" + query + "\" starting from " + seedURL);
 
 		offerToQueue(seedURL, 0, 1, 0);
 
@@ -58,7 +79,7 @@ public class Crawler {
 			}
 
 			totalDownloaded++;
-			if(totalDownloaded >= Crawler.maxPages){
+			if (totalDownloaded >= maxPages) {
 				break;
 			}
 			if (crawlResult.getLink().getDepth() >= maxDepth) {
@@ -107,23 +128,10 @@ public class Crawler {
 	}
 
 	public static void main(String[] args) {
-		// String seedURL =
-		// "https://en.wikipedia.org/wiki/Wikipedia:Vandalismusmeldung";
-		String seedURL = "http://cs.nyu.edu/courses/spring16/CSCI-GA.2580-001/MarineMammal/Whale.html";
-
-		List<String> query = new ArrayList<String>();
-		query.add("species");
-		query.add("whale");
-		query.add("whales");
-
-		if (Crawler.verbose) {
-			System.out.println("Crawling for " + Crawler.maxPages + " pages relevant to \"" + query
-					+ "\" starting from " + seedURL);
-		}
-
 		Crawler c = new Crawler();
+		new JCommander(c, args);
 		try {
-			c.crawl(seedURL, query);
+			c.crawl();
 		} catch (IOException | InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
