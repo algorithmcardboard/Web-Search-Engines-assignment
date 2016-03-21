@@ -6,51 +6,68 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.concurrent.Callable;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 
-public class CrawlTask implements Comparable<CrawlTask>, Callable<CrawlResult> {
+import HTMLParser.Parser;
 
-	private Integer priority;
+public class CrawlTask{
+
 	private String url;
-	private String requestMethod;
-	private static final String absPath = "docs/";
+	private Link link;
+	public static String absPath = "docs/";
 	
-	public CrawlTask(int priority, String url, String requestMethod) {
-		System.out.println("Creating object");
-		this.priority = priority;
-		this.url = url;
-		if(requestMethod.equals("HEAD") || requestMethod.equals("GET")){
-			this.requestMethod = requestMethod;
-		}else{
-			throw new IllegalArgumentException();
-		}
+	public CrawlTask(Link link) {
+		this.url = link.getUrl();
+		this.link = link;
+	}
+	
+	public static String getAbspath() {
+		return absPath;
 	}
 
-	@Override
-	public int compareTo(CrawlTask o) {
-		return this.priority.compareTo(o.priority); 
-	}
-
-	@Override
-	public CrawlResult call() throws Exception {
-		System.out.println("Call task called");
+	public CrawlResult fetchAndSavePage(String query) throws Exception {
+		
 		URL url = new URL(this.url);
+		
+		if(this.link.wasCrawled()  || ! RobotsTxt.isSafe(url)){
+			return null;
+		}
+		
+		this.link.doneCrawling();
+		
+		System.out.println(this.url);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod(this.requestMethod);
+		connection.setRequestMethod("HEAD");
 		int responseCode = connection.getResponseCode();
 		if (responseCode / 100 != 2) {
-			return new CrawlResult(responseCode);
+			return new CrawlResult(this.link, responseCode);
 		}
 		
 		String file = CrawlTask.absPath + url.getHost() + url.getPath();
-		new File(new File(file).getParent()).mkdirs();
+		File f = new File(new File(file).getParent());
+		f.mkdirs();
+		
+		connection.disconnect();
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("GET");
 		
 		ReadableByteChannel channel = Channels.newChannel(url.openStream());
 		FileOutputStream fos = new FileOutputStream(new File(file));
 		long transferFrom = fos.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
 		fos.close();
 		
-		return new CrawlResult(responseCode, transferFrom);
+		Parser parser = new Parser(Paths.get(file));
+		Map<Integer, List<String>> linksAndScores = parser.getLinksAndScores(url, query);
+		
+		return new CrawlResult(link, responseCode, transferFrom, linksAndScores);
 	}
 
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
 }
