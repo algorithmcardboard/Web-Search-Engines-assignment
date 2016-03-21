@@ -65,7 +65,6 @@ public class RobotsTxt {
 			}
 		}
 
-		System.out.println("Robots is "+isSafe);
 		return isSafe;
 	}
 

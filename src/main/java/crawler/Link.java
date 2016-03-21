@@ -1,6 +1,10 @@
 package crawler;
 
 public class Link implements Comparable<Link>{
+	
+	private static int counter = 1;
+	
+	private int id; 
 	private String url;
 	private int priority = 0;
 	private int responseCode;
@@ -11,6 +15,7 @@ public class Link implements Comparable<Link>{
 		this.url = urlString;
 		this.priority = priority;
 		this.depth = depth;
+		this.id = counter++;
 	}
 	
 	public void doneCrawling(){
@@ -55,7 +60,10 @@ public class Link implements Comparable<Link>{
 	
 	@Override
 	public int compareTo(Link o) {
-		return new Integer(this.priority).compareTo(o.priority);
+		if(new Integer(o.priority).compareTo(this.priority) == 0){
+			return new Integer(this.id).compareTo(o.id);
+		}
+		return new Integer(o.priority).compareTo(this.priority);
 	}
 
 	/* (non-Javadoc)
