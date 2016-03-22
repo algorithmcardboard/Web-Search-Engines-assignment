@@ -34,7 +34,7 @@ Depending on the computational complexity and performance of the search engines,
 \section{Sketch of Architecture}
 The search engine will be built by using the following different components.
 \begin{description}
-  \item[Web interface:] A web interface for the user to issue the search queries.  This will be an interface with just one text box.
+  \item[Web interface:] A web interface for the user to issue the search queries.  This will be an interface with just two text boxes. One for the product name and another for the feature name.
   \item[Index store:]  The index store consists of data which can be retrieved from Lucene.  The data will be populated and updated periodically by a crawler job that looks for updates to the data.  The data will be stored in lucene after preprocessing.
   \item[Crawler job:] Given a set of seed url, maximum depth of search and maximum number of pages to fetch, the crawler job will fetch all the urls that are reachable from the seedURL and dump the data in a folder.
   \item[Preprocessing module:]  This module takes care of preprocessing the data as required by the NLP module and dumps the processed data into Lucene.
