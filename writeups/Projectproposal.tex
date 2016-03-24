@@ -1,0 +1,61 @@
+\documentclass{article}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{systeme}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Himaja Rachakonda, Anirudhan J. Rajagopalan}
+
+\begin{document}
+
+\title{Web Search Engines --- Project Proposal}
+\date{March 21, 2016}
+\author{Himaja Rachakonda, Anirudhan J. Rajagopalan\\ N14633788, N18824115\\ hr970, ajr619}
+\maketitle
+\newpage
+
+\section{Title}
+The project is to be titled ``Review-Rehashed'' will summarize the reviews of a product with respect to a particular feature.
+
+\section{Team Members}
+\begin{enumerate}
+  \item Himaja Rachakonda, N14633788, hr970@nyu.edu
+  \item Anirudhan J. Rajagopalan, N18824115, ajr619@nyu.edu
+\end{enumerate}
+
+\section{Objective}
+The aim of this project is to extract sentences from online reviews which discuss about the features of a product and present it to the user.  
+For example for a search term, say, ``LG G3, Battery Life'' will list the excerpts from all reviews that discuss about the battery life of LG G3 phone. 
+Depending on the computational complexity and performance of the search engines, we will try to expand the search feature to multiple features and combination of features.
+
+\section{Sketch of Architecture}
+The search engine will be built by using the following different components.
+\begin{description}
+  \item[Web interface:] A web interface for the user to issue the search queries.  This will be an interface with just two text boxes. One for the product name and another for the feature name.
+  \item[Index store:]  The index store consists of data which can be retrieved from Lucene.  The data will be populated and updated periodically by a crawler job that looks for updates to the data.  The data will be stored in lucene after preprocessing.
+  \item[Crawler job:] Given a set of seed url, maximum depth of search and maximum number of pages to fetch, the crawler job will fetch all the urls that are reachable from the seedURL and dump the data in a folder.
+  \item[Preprocessing module:]  This module takes care of preprocessing the data as required by the NLP module and dumps the processed data into Lucene.
+  \item[NLP module:] This module will be invoked during the query time.  This is essentially a machine learning model that was pre trained using the data collected by the crawler.  We use this to rank and get the list of all matching sentences for a given query.
+\end{description}
+
+\section{List of web resources}
+We are planning to scrape data from 
+\begin{enumerate}
+  \item Amazon.com
+  \item Bestbuy.com
+\end{enumerate}
+in very narrow categories of products (say electronics, or books).
+
+\section{Technologies used}
+We are planning to use the following resources for building the search engine.
+\begin{description}
+  \item[Programming Language]: Java, J2EE
+  \item[Web server]: Apache Tomcat
+  \item[Index Store]: Apache Lucene
+  \item[NLP library]: Apache Mahout
+\end{description}
+
+\end{document}
