@@ -40,6 +40,13 @@ task crawlerjar(type: Jar) {
     with jar
 }
 
+task indexjar(type: Jar) {
+    baseName = "indexer"
+    mainClassName = 'IndexerRetriver.Indexer'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 uploadArchives {
     repositories {
        flatDir {
