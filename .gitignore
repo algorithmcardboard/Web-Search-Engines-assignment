@@ -94,3 +94,5 @@ segments_*
 *.dvi
 *.log
 *.ps
+
+docs
