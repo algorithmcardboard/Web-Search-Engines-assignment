@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\pagestyle{fancy}
+\lhead{Anirudhan J Rajagopalan --- ajr619 --- N18824115}
+
+\begin{document}
+
+\title{Web Search Engines --- Homework 3}
+\date{March 28, 2016}
+\author{Anirudhan J Rajagopalan\\ N18824115\\ ajr619}
+\maketitle
+
+\newpage
+
+\section{Problem 2}
+\subsection{How to evaluate an image search engine}
+Evaluating any search engine involves defining what ``relevancy'' is with respect to the particular audience the search engine is designed to serve.
+The relevancy of a search engine might be dependent on how the input is provided.  Incase of image search, the search can be done by text or by providing images.
+
+\subsubsection{Image input}
+When a search is based on image input, the returned images should be similar to the input image.  This will depend on various descriptors of an image such as brightness, contrast, colors and so on.
+
+Suppose we upload an image of a patch of tiger skin, the first relevant answer can be a sofa which has stripes similar to that of a tiger.  This result is acceptable because the sofa's pattern matches the input image's pattern.
+
+\subsubsection{Text input}
+When an image search is triggered by textual input, the result should be an image which best describes the textual content given by the user.
+
+Suppose, the user searches for ``tiger skin'', the first relevant answer should be an image which shows tiger skin and not a sofa which is covered by a cloth similar to tiger skin.
+
+\subsection{How evaluating image search differs from textual search}
+As discussed above, evaluating image search differs from textual search mainly because of the type of inputs that can be provided to the system.
+
+Also the conecpt of relevancy can get confusing when we deal with images \& text, especially when the input is an image.  An image search for ``August Rush'' can return the posters of movie \textit{August rush} which is quite relevant for people looking for the movie.  But it can also return images of a festival which happens in August and attracts huge amount of people.  This may or maynot be relevant to the user who tries to search for images using textual content.
+
+
+\end{document}
