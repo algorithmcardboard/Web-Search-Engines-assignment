@@ -6,6 +6,8 @@
 \usepackage{fancyhdr}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+\usepackage{tabularx}
+\usepackage{multirow}
 \pagestyle{fancy}
 \lhead{Anirudhan J Rajagopalan --- ajr619 --- N18824115}
 
@@ -17,6 +19,99 @@
 \maketitle
 
 \newpage
+
+\section{Problem 1}
+
+The decision of the two judges can be summarized as:
+\begin{center}
+  \begin{tabular}{cc|c|c|}
+    \cline{3-4}
+    & & \multicolumn{2}{c|}{Judge 2} \\ \cline{3-4}
+    & & Yes & No \\ \cline{1-4}
+    \multicolumn{1}{|c}{\multirow{2}{*}{Judge 1}} & 
+    \multicolumn{1}{|c|}{Yes} & 2 & 4 \\ \cline{2-4}
+    \multicolumn{1}{|c}{} &
+    \multicolumn{1}{|c|}{No} & 4 & 2 \\ \cline{1-4}
+  \end{tabular}
+\end{center}
+
+For the above condition, we get
+\begin{align*}
+  P(A) = \frac{2 + 2}{12}
+\end{align*}
+
+\begin{align*}
+  P(nonrelevant) = \frac{6 + 6}{12 + 12} = 0.5
+\end{align*}
+
+\begin{align*}
+  P(relevant) = \frac{6 + 6}{12 + 12} = 0.5
+\end{align*}
+
+\begin{align*}
+  P(E) = & {P(NR)}^{2} + {P(R)}^{2} \\
+  =& 0.5^{2} + 0.5^{2} \\
+  =& 0.5
+\end{align*}
+
+\subsection{$kappa$ statistic}
+
+\begin{align*}
+  \kappa =& \frac{P(A) - P(E)}{1 - P(E)} \\
+  =& \frac{0.33 - 0.5}{1 - 0.5} \\
+  =& -0.36
+\end{align*}
+
+\subsection{Relevant only if both judges agree}
+\#Relevant documents retrieved = 1 \\
+\#retrieved documents = 5 \\
+\#relevant documents = 4 \\
+\subsubsection{Precision}
+\begin{align*}
+  Precision =& \frac{\#relevant documents retrieved}{\#retrieved documents} \\
+  =& \frac{1}{5} \\
+  =& 0.2
+\end{align*}
+
+\subsubsection{Recall}
+\begin{align*}
+  Recall =& \frac{\#relevant documents retrieved}{\#relevant documents}\\
+  =& \frac{1}{4} \\
+  =& 0.25
+\end{align*}
+
+\subsubsection{$F_{1}$ --- score}
+\begin{align*}
+  F_{1} =& \frac{2PR}{P+R} \\
+  =& \frac{2*0.2*0.25}{0.2+0.25} \\
+  =& 0.222
+\end{align*}
+
+\subsection{Relevant if either judge thinks relevant}
+\#Relevant documents retrieved = 5 \\
+\#retrieved documents = 5 \\
+\#relevant documents = 10 \\
+
+\subsubsection{Precision}
+\begin{align*}
+  Precision =& \frac{\#relevant documents retrieved}{\#retrieved documents} \\
+  =& \frac{5}{5} \\
+  =& 1
+\end{align*}
+
+\subsubsection{Recall}
+\begin{align*}
+  Recall =& \frac{\#relevant documents retrieved}{\#relevant documents}\\
+  =& \frac{5}{10} \\
+  =& 0.5
+\end{align*}
+
+\subsubsection{$F_{1}$ --- score}
+\begin{align*}
+  F_{1} =& \frac{2PR}{P+R} \\
+  =& \frac{2 * 1 * 0.5}{1 + 0.5} \\
+  =& 0.667
+\end{align*}
 
 \section{Problem 2}
 \subsection{How to evaluate an image search engine}
@@ -38,5 +133,110 @@ As discussed above, evaluating image search differs from textual search mainly b
 
 Also the conecpt of relevancy can get confusing when we deal with images \& text, especially when the input is an image.  An image search for ``August Rush'' can return the posters of movie \textit{August rush} which is quite relevant for people looking for the movie.  But it can also return images of a festival which happens in August and attracts huge amount of people.  This may or maynot be relevant to the user who tries to search for images using textual content.
 
+\section{Problem 3}
+Given a relation between Gold standard and custom clustering as follows:
+\begin{center}
+  \begin{tabular}{llll}
+      & A & B & C \\
+    X & 10 & 40 & 20 \\
+    Y & 50 & 10 & 20 \\
+  \end{tabular}
+\end{center}
+
+\subsection{Purity of cluster}
+
+For the given example 
+\begin{align*}
+  \Omega = & {X, Y} \\
+  \mathbb{C} = & {A, B, C}
+\end{align*}
+
+The purity is given by 
+\begin{align*}
+  purity(\Omega, \mathbb{C}) = & \frac{1}{N} \sum_{k} \max_{j} |\omega_{k} \cap C_{j}|
+\end{align*}
+
+We interpret $\omega_{k}$ as the set of documents in $\omega_{k}$ and $ c_{j} $ as the set of documents in $c_{j}$.
+
+Therefore the purity for the given cluster combination is given by 
+
+\begin{align*}
+  purity(\Omega, \mathbb{C}) =& \frac{1}{150} ( 40 + 50 )\\
+  =& \frac{90}{150}\\
+  =& 0.6
+\end{align*}
+
+\subsection{Computation for TP, TN, FP, FN, P, R, $F_{\beta}$ }
+\subsubsection{TP --- True Positives}
+Pairs $ \alpha -  \beta $ which are in the same cluster in both the gold standard and in the algorithmic clustering.
+
+The True Positives are given by 
+\begin{align*}
+  TP =& \frac{10 * 9}{2} + \frac{40 * 39}{2} + \frac{20 * 19}{2} + \frac{50 * 49}{2} + \frac{10 * 9}{2} + \frac{20 * 19}{2} \\
+  =& 20*39 + 25*49 + 20*19 + 10*9 \\
+  =& 2475
+\end{align*}
+
+\subsubsection{FP --- False Positives}
+Pairs $ \alpha -  \beta $ which are in the same cluster in the algorithmic cluster but different clusters in the gold standard.
+
+The False Positives are given by 
+\begin{align*}
+  FP =& 10*40 + 10*20 + 40*20 + 50*10 + 50*20 + 10*20 \\
+  =& 400 + 200 + 800 + 500 + 1000 + 200 \\
+  =& 3100
+\end{align*}
+
+\subsubsection{FN --- False Negatives}
+Pairs $ \alpha -  \beta $ which are in the same cluster in the gold standard, but different algorithmic clusters.
+
+The False Negatives are given by 
+\begin{align*}
+  FN =& 10*50 + 40*10 + 20*20 \\
+  =& 500 + 400 + 400 \\
+  =& 1300
+\end{align*}
+
+\subsubsection{TN --- True Negatives}
+Pairs $ \alpha -  \beta $ that are in different clusters in both the gold standard and the algorithmic clustering.
+
+The True Negatives are given by 
+\begin{align*}
+  TN =& 10*10 + 10*20 + 40*50 + 40*20 + 20*50 + 20*10 \\
+  =& 100 + 200 + 2000 + 800 + 1000 + 200 \\
+  =& 4300
+\end{align*}
+
+\subsection{Rand index}
+\begin{align*}
+  RI = & \frac{TP + TN}{TP + FP + FN + TN} \\
+  =& \frac{6775}{11175} \\
+  =& 0.606
+\end{align*}
+
+\subsection{Precision}
+\begin{align*}
+  Precision =& \frac{TP}{TP+FP} \\
+  =& \frac{2475}{2475 + 3100}\\
+  =& \frac{2475}{5575} \\
+  =& 0.4439
+\end{align*}
+
+\subsection{Recall}
+\begin{align*}
+  Recall =& \frac{TP}{TP + FN} \\
+  =& \frac{2475}{2475 + 1300} \\
+  =& \frac{2475}{3775} \\
+  =& 0.6556
+\end{align*}
+
+\subsection{F score when $\beta$=1}
+\begin{align*}
+  F_{\beta} =& \frac{(\beta^{2} + 1) * P * R}{\beta^{2}P + R} \\
+  =& \frac{2PR}{P+R} \\
+  =& \frac{2 * 0.4439 * 0.6556}{0.4439 + 0.6556} \\
+  =& \frac{0.5820}{1.0995} \\
+  =& 0.5293
+\end{align*}
 
 \end{document}
