@@ -125,6 +125,9 @@ Suppose we upload an image of a patch of tiger skin, the first relevant answer c
 
 \subsubsection{Text input}
 When an image search is triggered by textual input, the result should be an image which best describes the textual content given by the user.
+The most important way in which we can check for relevancy is to verify if objects representing each and every search term is present in the result images.  
+
+Suppose an user searches for ``Monkey swinging from a tree''.  The first result should have a monkey, and a tree and possibily the monkey swinging.  The second result can have a moneky, a tree and a swing and so on.
 
 Suppose, the user searches for ``tiger skin'', the first relevant answer should be an image which shows tiger skin and not a sofa which is covered by a cloth similar to tiger skin.
 
