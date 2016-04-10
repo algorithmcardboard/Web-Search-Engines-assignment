@@ -17,6 +17,7 @@ public class Page {
 	private Path path;
 	private String text;
 	private Document doc;
+	private double newScore;
 	
 	public Page(Path path) throws IOException{
 		this.path = path;
@@ -57,7 +58,7 @@ public class Page {
 	}
 
 	public void calculateScore(double sum) {
-		this.score = this.score/sum; 
+		this.base = this.score = (this.score/sum); 
 	}
 
 	public boolean hasOutboundLinks() {
@@ -72,7 +73,7 @@ public class Page {
 		Map<Path, Integer> outboundLinks = new HashMap<>();
 		for (Element element : this.doc.select("a[href]")) {
 			Path path = Paths.get(element.attr("href"));
-			System.out.println("Path got is "+path + " END");
+//			System.out.println("Path got is "+path + " END");
 			if(!outboundLinks.containsKey(path)){
 				outboundLinks.put(path, 0);
 			}
@@ -95,5 +96,13 @@ public class Page {
 			}
 		}
 		return false;
+	}
+
+	public void setNewScore(double newScore) {
+		this.newScore = newScore;
+	}
+
+	public void swapScores() {
+		this.score = this.newScore;
 	}
 }

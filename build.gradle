@@ -47,6 +47,13 @@ task indexjar(type: Jar) {
     with jar
 }
 
+task pagerankjar(type: Jar) {
+    baseName = "pagerank"
+    mainClassName = 'pagerank.PageRank'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 uploadArchives {
     repositories {
        flatDir {
